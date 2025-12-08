@@ -6,7 +6,7 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
     const { addTransaction, updateTransaction, data } = useData();
 
     // Default today's date
-    const today = format(new Date(), 'yyyy-MM-dd');
+    const today = format(new Date(), 'yyyy-MM-dd HH:mm');
 
     const [formData, setFormData] = useState({
         amount: '',
@@ -94,7 +94,7 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
                 <div>
                     <label>Fecha</label>
                     <input
-                        type="date"
+                        type="datetime-local"
                         value={formData.date}
                         onChange={e => setFormData({ ...formData, date: e.target.value })}
                     />

@@ -69,9 +69,9 @@ export const Dashboard = ({ onOpenTransaction }) => {
 
 
             {/* TOP SECTION */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[45vh] lg:min-h-[400px]">
+            <div className="flex gap-6 lg:h-[55vh] flex-col md:flex-row ">
                 {/* 1. Balance Trend & Summary */}
-                <Card className="flex flex-col relative overflow-hidden bg-white border-slate-200 h-[380px] lg:h-auto">
+                <Card className="flex md:flex-1 flex-col relative overflow-hidden bg-white border-slate-200 h-[380px] lg:h-auto">
                     <div className="flex justify-between items-start mb-4 z-10">
                         <div>
                             <h3 className="text-xs lg:text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1">Solde Actuel</h3>

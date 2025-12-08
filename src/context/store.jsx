@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
-    startOfMonth, endOfMonth, eachDayOfInterval, format, isSameMonth,
-    addMonths, isFuture, isSameDay, startOfDay, subMonths, isBefore, isAfter
+    startOfMonth, endOfMonth, eachDayOfInterval, format, 
+    addMonths, isSameDay, startOfDay, subMonths, isBefore, isAfter
 } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { supabase } from '../supabase';
@@ -44,9 +44,6 @@ export const DataProvider = ({ children }) => {
                 return {
                     ...t,
                     category: cat ? cat.name : 'Inconnu',
-                    // Create a virtual ID if needed, but Supabase uses int IDs.
-                    // The UI might expect string IDs unless we updated it. 
-                    // Let's assume int IDs are fine or convert if needed.
                 };
             }).sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -83,8 +80,6 @@ export const DataProvider = ({ children }) => {
 
     useEffect(() => {
         fetchData();
-
-        // Optional: Realtime subscription could be added here
     }, []);
 
     // --- Actions ---

@@ -11,7 +11,7 @@ export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }
     return (
         <div className="flex flex-col min-h-screen pb-24 md:pb-0 md:flex-row bg-slate-50">
             {/* Sidebar for Desktop */}
-            <aside className="hidden md:flex flex-col w-72 bg-white border-r border-slate-200 p-6 fixed h-full top-0 left-0 z-20">
+            <aside className="hidden md:flex flex-col w-50 bg-white border-r border-slate-200 p-6 min-h-screen top-0 left-0 z-20">
                 <div className="mb-12 flex items-center gap-3 px-2">
                     <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
                         $
@@ -49,8 +49,8 @@ export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 w-full md:pl-72">
-                <div className=" mx-auto p-6 md:p-12 animate-fade-in">
+            <main className="flex-1 overflow-y-auto h-screen">
+                <div className="mx-auto p-6 md:p-8 animate-fade-in">
                     {children}
                 </div>
             </main>
