@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import {
-    startOfMonth, endOfMonth, eachDayOfInterval, format, 
+    startOfMonth, endOfMonth, eachDayOfInterval, format,
     addMonths, isSameDay, startOfDay, subMonths, isBefore, isAfter
 } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -377,7 +377,7 @@ export const DataProvider = ({ children }) => {
         // Sort and Slice
         return list
             .sort((a, b) => new Date(a.date) - new Date(b.date))
-            .slice(0, 10);
+            .slice(0, 5);
     }
 
     const getProjectedBalanceAPI = () => {

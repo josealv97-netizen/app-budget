@@ -1,9 +1,10 @@
-import { LayoutDashboard, Receipt, CalendarClock, Settings } from 'lucide-react';
+import { LayoutDashboard, Receipt, CalendarClock, Settings, Banknote } from 'lucide-react';
 
 export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }) => {
 
     const navItems = [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Inicio' },
+        { id: 'salaries', icon: Banknote, label: 'Salaires' },
         { id: 'transactions', icon: Receipt, label: 'Historial' },
         { id: 'recurring', icon: CalendarClock, label: 'Fijos' },
     ];

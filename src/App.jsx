@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Layout } from './components/Layout'
 import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
+import { Salaries } from './pages/Salaries'
 import { Recurring } from './pages/Recurring'
 import { DataProvider } from './context/store'
 import { Modal } from './components/Modal'
@@ -18,6 +19,7 @@ function App() {
       case 'dashboard': return <Dashboard onOpenTransaction={() => { setEditingTransaction(null); setActiveModal('transaction'); }} />;
       // case 'transactions': return <Transactions />; // Updated below in Layout
       case 'recurring': return <Recurring />;
+      case 'salaries': return <Salaries />;
       default: return <Dashboard onOpenTransaction={() => { setEditingTransaction(null); setActiveModal('transaction'); }} />;
     }
   }
