@@ -16,11 +16,19 @@ function App() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'dashboard': return <Dashboard onOpenTransaction={() => { setEditingTransaction(null); setActiveModal('transaction'); }} />;
+      case 'dashboard': return <Dashboard onOpenTransaction={(t) => {
+        const isTransaction = t && t.id && !t.nativeEvent;
+        setEditingTransaction(isTransaction ? t : null);
+        setActiveModal('transaction');
+      }} />;
       // case 'transactions': return <Transactions />; // Updated below in Layout
       case 'recurring': return <Recurring />;
       case 'salaries': return <Salaries />;
-      default: return <Dashboard onOpenTransaction={() => { setEditingTransaction(null); setActiveModal('transaction'); }} />;
+      default: return <Dashboard onOpenTransaction={(t) => {
+        const isTransaction = t && t.id && !t.nativeEvent;
+        setEditingTransaction(isTransaction ? t : null);
+        setActiveModal('transaction');
+      }} />;
     }
   }
 

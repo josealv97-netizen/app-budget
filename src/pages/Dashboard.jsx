@@ -82,7 +82,7 @@ export const Dashboard = ({ onOpenTransaction }) => {
                     <button
                         key={r.key}
                         onClick={() => setRange(r.key)}
-                        className={`px - 2 lg: px - 3 py - 1 rounded - md text - [10px] lg: text - xs font - medium transition - all ${range === r.key ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
+                        className={`px-2 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${range === r.key ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                     >
                         {r.label}
                     </button>
@@ -90,16 +90,16 @@ export const Dashboard = ({ onOpenTransaction }) => {
             </div>
 
             {/* Direction Switcher */}
-            <div className="flex gap-1 bg-slate-100 p-1 rounded-lg">
+            <div className="flex gap-1 bg-slate-100 p-2 rounded-lg">
                 <button
                     onClick={() => setDirection('past')}
-                    className={`px - 2 lg: px - 3 py - 1 rounded - md text - [10px] lg: text - xs font - medium transition - all ${direction === 'past' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
+                    className={`px-1 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'past' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                 >
                     Historique
                 </button>
                 <button
                     onClick={() => setDirection('future')}
-                    className={`px - 2 lg: px - 3 py - 1 rounded - md text - [10px] lg: text - xs font - medium transition - all ${direction === 'future' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
+                    className={`px-1 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'future' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                 >
                     Futur
                 </button>
@@ -142,25 +142,26 @@ export const Dashboard = ({ onOpenTransaction }) => {
                             <div className="text-2xl lg:text-3xl font-bold text-slate-900">€{balance.toLocaleString()}</div>
                         </div>
                         <div className="flex items-start gap-4">
-                            <div className="text-right hidden sm:block">
+                            <div className="text-right  sm:block">
                                 <h3 className="text-[10px] lg:text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Projection (Fin de mois)</h3>
                                 <div className="text-lg lg:text-xl font-bold text-blue-600">€{projected.toLocaleString()}</div>
                             </div>
-                            <button
-                                onClick={() => setIsFullScreen(true)}
-                                className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors"
-                                title="Plein écran"
-                            >
-                                <Maximize2 size={20} />
-                            </button>
                         </div>
                     </div>
 
-                    <div className="mb-2 z-10">
-                        <Controls />
+                    <div className="mb-2 z-10 flex items-center justify-between">
+                        <Controls className="flex-1" />
+                        <button
+                            onClick={() => setIsFullScreen(true)}
+                            className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors"
+                            title="Plein écran"
+                        >
+                            <Maximize2 size={20} />
+                        </button>
                     </div>
 
                     <div className="flex-1 w-full min-h-0 pl-0 -ml-2">
+
                         <BalanceChart data={chartData} direction={direction} />
                     </div>
                 </Card>
@@ -203,7 +204,7 @@ export const Dashboard = ({ onOpenTransaction }) => {
             </div>
 
             {/* BOTTOM SECTION - Unified Timeline */}
-            <Card className="pb">
+            <Card className="px-0 ">
                 <div className="flex justify-between items-center mb-2">
                     <h3 className="heading-md flex items-center gap-2">
                         <Calendar size={20} className="text-slate-400" />
