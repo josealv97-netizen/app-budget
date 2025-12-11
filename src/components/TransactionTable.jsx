@@ -72,14 +72,15 @@ export const TransactionTable = ({ transactions, onEdit, onDelete }) => {
                         <div
                             key={t.id}
                             onClick={() => onEdit && onEdit(t)}
-                            className={`relative py-3 border-b border-slate-100 last:border-0 flex items-start gap-3 transition-colors ${isFuture ? 'bg-amber-50/30' : 'hover:bg-slate-50'}`}
+                            className={`relative py-2 border-b border-slate-100 last:border-0 flex items-start gap-3 transition-colors ${isFuture ? 'bg-amber-50/30' : 'hover:bg-slate-50'}`}
                         >
                             <CategoryIcon iconName={cat?.icon} color={cat?.color || '#cbd5e1'} />
 
                             <div className="flex-1 min-w-0">
-                                <div className="flex justify-between items-start gap-2">
-                                    <h4 className="font-semibold text-slate-900 text-sm truncate">{t.description}</h4>
-                                    <span className={`font-bold text-sm whitespace-nowrap ${t.type === 'income' ? 'text-green-600' : 'text-slate-900'}`}>
+                                <div className="flex items-start gap-2">
+
+                                    <h4 className="font-semibold text-slate-900 text-sm truncate flex-1">{t.description}</h4>
+                                    <span className={`font-bold text-sm whitespace-nowrap ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
                                         {t.type === 'expense' && '-'}€{Number(t.amount).toLocaleString()}
                                     </span>
                                 </div>
@@ -87,14 +88,11 @@ export const TransactionTable = ({ transactions, onEdit, onDelete }) => {
                                 <div className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
                                     <span className="font-medium text-slate-600">{t.category}</span>
                                     <span>•</span>
-                                    <span>{format(new Date(t.date), 'd MMM HH:mm', { locale: fr })}</span>
+                                    <span>{format(new Date(t.date), 'd/MM HH:mm', { locale: fr })}</span>
                                     {t.status && (
-                                        <>
-                                            <span>•</span>
-                                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${t.status === 'En attente' ? 'bg-amber-100 text-amber-600' : 'bg-green-100 text-green-600'}`}>
-                                                {t.status}
-                                            </span>
-                                        </>
+                                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${t.status === 'En attente' ? 'bg-amber-100 text-amber-600' : 'bg-green-100 text-green-600'}`}>
+                                            {t.status}
+                                        </span>
                                     )}
                                 </div>
                             </div>

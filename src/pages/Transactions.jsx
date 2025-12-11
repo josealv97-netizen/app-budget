@@ -7,10 +7,13 @@ export const Transactions = ({ onEdit }) => {
     const { data, removeTransaction } = useData();
     const [search, setSearch] = useState('');
 
+    console.log(data);
+
     const filtered = data.transactions.filter(t =>
         t.description.toLowerCase().includes(search.toLowerCase()) ||
         t.category.toLowerCase().includes(search.toLowerCase())
-    );
+    ).map(t => ({ ...t, status: new Date(t.date) > new Date() ? "En attente" : "Validé" }))
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
 
     return (
         <div className="space-y-6 h-full flex flex-col">

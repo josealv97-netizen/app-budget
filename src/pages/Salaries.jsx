@@ -102,59 +102,55 @@ export const Salaries = () => {
                     </div>
                 </div>
 
-                {/* Table */}
-                <div className="overflow-auto flex-1">
-                    <table className="w-full text-left border-collapse">
-                        <thead className="bg-slate-50/80 backdrop-blur sticky top-0 z-10 border-b border-slate-100">
-                            <tr>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Mois</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Montant (Net)</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Statut</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-50">
-                            {MONTHS.map(monthIndex => {
-                                const date = new Date(selectedYear, monthIndex, 1);
-                                const transaction = getSalaryTransaction(monthIndex);
-                                const amount = transaction ? transaction.amount : '';
 
-                                return (
-                                    <tr key={`${selectedYear}-${monthIndex}`} className="hover:bg-slate-50/50 transition-colors">
-                                        <td className="px-6 py-2">
-                                            <span className="font-medium text-slate-900 capitalize block">
-                                                {format(date, 'MMMM', { locale: fr })}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-2">
-                                            <div className="relative max-w-xs">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
-                                                {/* Key added to input to force re-render when year changes */}
-                                                <input
-                                                    key={`input-${selectedYear}-${monthIndex}`}
-                                                    type="number"
-                                                    placeholder="0.00"
-                                                    defaultValue={amount}
-                                                    onBlur={(e) => handleSalaryChange(monthIndex, e.target.value)}
-                                                    className="pl-8 font-semibold text-slate-900 bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 py-1.5"
-                                                />
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-2 text-right">
-                                            {transaction ? (
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    Enregistré
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">
-                                                    -
-                                                </span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                <div className="overflow-auto flex-1">
+
+                    <div className='flex'>
+                        <div className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Mois</div>
+                        <div className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Montant (Net)</div>
+                        <div className="px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Statut</div>
+                    </div>
+
+                    {MONTHS.map(monthIndex => {
+                        const date = new Date(selectedYear, monthIndex, 1);
+                        const transaction = getSalaryTransaction(monthIndex);
+                        const amount = transaction ? transaction.amount : '';
+
+                        return (
+                            <div key={`${selectedYear}-${monthIndex}`} className="hover:bg-slate-50/50 transition-colors flex justify-between items-center">
+                                <div className="py-2 w-1/3 px-6">
+                                    <span className="font-medium text-slate-900 capitalize block">
+                                        {format(date, 'MMMM', { locale: fr })}
+                                    </span>
+                                </div>
+                                <div className="py-2 w-1/3 px-3">
+                                    <div className="relative max-w-xs">
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                                        {/* Key added to input to force re-render when year changes */}
+                                        <input
+                                            key={`input-${selectedYear}-${monthIndex}`}
+                                            type="number"
+                                            placeholder="0.00"
+                                            defaultValue={amount}
+                                            onBlur={(e) => handleSalaryChange(monthIndex, e.target.value)}
+                                            className="pl-8 font-semibold text-slate-900 bg-white border-slate-200 focus:border-blue-500 focus:ring-blue-500/20 py-1.5"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="py-2 w-1/3 text-right px-3">
+                                    {transaction ? (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Enregistré
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                            En attente
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         </div>
