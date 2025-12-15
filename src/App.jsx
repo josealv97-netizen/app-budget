@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard'
 import { Transactions } from './pages/Transactions'
 import { Salaries } from './pages/Salaries'
 import { Recurring } from './pages/Recurring'
+import { Modules } from './pages/Modules'
 import { DataProvider } from './context/store'
 import { Modal } from './components/Modal'
 import { SettingsForm } from './components/forms/SettingsForm'
@@ -24,6 +25,7 @@ function App() {
       // case 'transactions': return <Transactions />; // Updated below in Layout
       case 'recurring': return <Recurring />;
       case 'salaries': return <Salaries />;
+      case 'modules': return <Modules />;
       default: return <Dashboard onOpenTransaction={(t) => {
         const isTransaction = t && t.id && !t.nativeEvent;
         setEditingTransaction(isTransaction ? t : null);

@@ -19,16 +19,16 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center h-[100dvh] w-full p-4 pointer-events-none">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity"
+                className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity pointer-events-auto"
                 onClick={onClose}
             />
 
-            {/* Content */}
-            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl shadow-slate-200 scale-100 opacity-100 transition-all animate-fade-in-down border border-slate-100">
-                <div className="flex items-center justify-between p-4 border-b border-slate-100">
+            {/* Content Container */}
+            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl shadow-slate-200 scale-100 opacity-100 transition-all animate-fade-in-down border border-slate-100 pointer-events-auto flex flex-col max-h-[90%]">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-slate-100 shrink-0">
                     <h3 className="text-xl font-bold text-slate-800">{title}</h3>
                     <button
                         onClick={onClose}
@@ -37,7 +37,7 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
                         <X size={20} />
                     </button>
                 </div>
-                <div className="p-4 max-h-[80vh] overflow-y-auto">
+                <div className="p-4 overflow-y-auto min-h-0">
                     {children}
                 </div>
             </div>

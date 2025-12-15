@@ -27,7 +27,7 @@ body {
 }
 
 .heading-md {
-  @apply text-xl font-bold mb-3 text-slate-900;
+  @apply text-lg font-bold mb-3 text-slate-900;
 }
 
 .heading-sm {

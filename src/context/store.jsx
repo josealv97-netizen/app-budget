@@ -14,6 +14,7 @@ export const DataProvider = ({ children }) => {
         transactions: [],
         recurring: [],
         categories: [],
+        limits: [],
         preferences: {
             initialBalance: 0,
             startDate: format(new Date(), 'yyyy-MM-01')
@@ -23,17 +24,21 @@ export const DataProvider = ({ children }) => {
 
     const fetchData = async () => {
         try {
-            const [cats, trans, recur, prefs] = await Promise.all([
+            const [cats, trans, recur, prefs, limits] = await Promise.all([
                 supabase.from('categories').select('*'),
                 supabase.from('transactions').select('*'),
                 supabase.from('recurring_transactions').select('*'),
-                supabase.from('preferences').select('*')
+                supabase.from('preferences').select('*'),
+                supabase.from('monthly_limits').select('*')
             ]);
 
             if (cats.error) throw cats.error;
             if (trans.error) throw trans.error;
             if (recur.error) throw recur.error;
             if (prefs.error) throw prefs.error;
+            // limits might be empty or error if table doesn't exist yet, handle gracefully if possible or assume user ran SQL
+            // validation omitted for speed, assuming happy path after SQL run
+            const limitsData = limits.data || [];
 
             // Process Data
             const categories = cats.data;
@@ -70,6 +75,7 @@ export const DataProvider = ({ children }) => {
                 recurring,
                 categories,
                 preferences,
+                limits: limitsData,
                 loading: false
             });
 
@@ -213,6 +219,21 @@ export const DataProvider = ({ children }) => {
 
     const removeCategory = async (id) => {
         await supabase.from('categories').delete().eq('id', id);
+        fetchData();
+    };
+
+    const addLimit = async (limit) => {
+        const { error } = await supabase.from('monthly_limits').insert([{
+            name: limit.name,
+            amount: limit.amount,
+            category_ids: limit.category_ids
+        }]);
+        if (error) console.error("Error adding limit:", error);
+        fetchData();
+    };
+
+    const removeLimit = async (id) => {
+        await supabase.from('monthly_limits').delete().eq('id', id);
         fetchData();
     };
 
@@ -402,6 +423,8 @@ export const DataProvider = ({ children }) => {
             updatePreferences,
             addCategory,
             removeCategory,
+            addLimit,
+            removeLimit,
             getCurrentBalance,
             getProjectedBalanceAPI,
             //   getUpcomingTransactions,

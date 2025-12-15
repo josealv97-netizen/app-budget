@@ -189,7 +189,7 @@ export const TransactionTable = ({ transactions, onEdit, onDelete }) => {
                                     </td>
                                     <td className="px-4 py-2 text-right" onClick={(e) => e.stopPropagation()}>
                                         <div className="flex items-center justify-end gap-1">
-                                            <div className="flex items-center gap-1 opacity-0 md:group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center gap-1">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); onEdit && onEdit(t); }}
                                                     className="p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"

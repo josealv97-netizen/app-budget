@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useData } from '../../context/store';
 import { format } from 'date-fns';
+import { CategorySelector } from '../CategorySelector';
 
 export const TransactionForm = ({ onClose, initialData = null }) => {
     const { addTransaction, updateTransaction, data } = useData();
@@ -50,14 +51,14 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
                 <button
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, type: 'expense', category: '' }))}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${formData.type === 'expense' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${formData.type === 'expense' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                     Gasto
                 </button>
                 <button
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, type: 'income', category: '' }))}
-                    className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${formData.type === 'income' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${formData.type === 'income' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                     Ingreso
                 </button>
@@ -102,18 +103,12 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
 
                 {/* Category */}
                 <div>
-                    <label>Categoría</label>
-                    <select
-                        value={formData.category}
-                        onChange={e => setFormData({ ...formData, category: e.target.value })}
-                    >
-                        <option value="">Seleccionar...</option>
-                        {filteredCategories.map(cat => (
-                            <option key={cat.id} value={cat.name}>
-                                {cat.name}
-                            </option>
-                        ))}
-                    </select>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">Categoría</label>
+                    <CategorySelector
+                        categories={filteredCategories}
+                        selectedId={formData.category} // Using name as ID
+                        onSelect={(id) => setFormData({ ...formData, category: id })}
+                    />
                 </div>
             </div>
 

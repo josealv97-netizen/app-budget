@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useData } from '../context/store';
 import { Plus, Calendar, Trash2, Edit2 } from 'lucide-react';
 import { Modal } from '../components/Modal';
+import { CategorySelector } from '../components/CategorySelector';
 
 export const Recurring = () => {
     const { data, addRecurring, removeRecurring, updateRecurring } = useData();
@@ -152,18 +153,12 @@ export const Recurring = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Catégorie</label>
-                        <select
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 focus:bg-white appearance-none"
-                            value={formData.category}
-                            onChange={e => setFormData({ ...formData, category: e.target.value })}
-                            required
-                        >
-                            <option value="">Sélectionner une catégorie</option>
-                            {availableCategories.map(cat => (
-                                <option key={cat.id} value={cat.name}>{cat.name}</option>
-                            ))}
-                        </select>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Catégorie</label>
+                        <CategorySelector
+                            categories={availableCategories}
+                            selectedId={formData.category}
+                            onSelect={(id) => setFormData({ ...formData, category: id })}
+                        />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

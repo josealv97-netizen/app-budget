@@ -1,10 +1,11 @@
-import { LayoutDashboard, Receipt, CalendarClock, Settings, Banknote } from 'lucide-react';
+import { LayoutDashboard, Receipt, CalendarClock, Settings, Banknote, Target } from 'lucide-react';
 
 export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }) => {
 
     const navItems = [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Inicio' },
-        { id: 'salaries', icon: Banknote, label: 'Salaires' },
+        { id: 'modules', icon: Target, label: 'Límites' },
+        { id: 'salaries', icon: Banknote, label: 'Salarios' },
         { id: 'transactions', icon: Receipt, label: 'Historial' },
         { id: 'recurring', icon: CalendarClock, label: 'Fijos' },
     ];
@@ -12,14 +13,11 @@ export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }
     return (
         <div className="flex flex-col min-h-screen pb-24 md:pb-0 md:flex-row bg-slate-50">
             {/* Sidebar for Desktop */}
-            <aside className="hidden md:flex flex-col w-50 bg-white border-r border-slate-200 p-6 min-h-screen top-0 left-0 z-20">
+            <aside className="hidden md:flex flex-col w-40 bg-white border-r border-slate-200 py-6 pb-0 px-3 min-h-screen top-0 left-0 z-20">
                 <div className="mb-12 flex items-center gap-3 px-2">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+                    <div className="w-12 h-12 bg-blue-600 text-2xl rounded-lg flex items-center justify-center text-white font-bold">
                         $
                     </div>
-                    <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-                        Mi Dinero
-                    </h1>
                 </div>
 
                 <nav className="flex-1 flex flex-col gap-2">
@@ -38,13 +36,12 @@ export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }
                     ))}
                 </nav>
 
-                <div className="border-t border-slate-100 pt-4 mt-auto">
+                <div className="border-t border-slate-100  mt-auto">
                     <button
                         onClick={onOpenSettings}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 w-full font-medium transition-all"
+                        className="flex text-center items-center justify-center gap-3 py-3 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-900 w-full font-medium transition-all"
                     >
-                        <Settings size={20} />
-                        <span>Configuración</span>
+                        <Settings size={24} />
                     </button>
                 </div>
             </aside>
@@ -75,7 +72,7 @@ export const Layout = ({ children, currentPage, setCurrentPage, onOpenSettings }
                     onClick={onOpenSettings}
                     className="flex flex-col items-center gap-1 p-3 rounded-2xl text-slate-400 w-20"
                 >
-                    <Settings size={24} />
+                    <Settings size={28} />
                     <span className="text-[10px] font-semibold">Ajustes</span>
                 </button>
             </nav>

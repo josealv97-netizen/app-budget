@@ -5,24 +5,11 @@ import { Card } from '../components/Card';
 import { TransactionTable } from '../components/TransactionTable';
 import { BalanceChart } from '../components/BalanceChart';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-import { Wallet, Calendar, Plus, Maximize2, X, Minimize2, Pizza, Car, PartyPopper, Zap, HandCoins, RotateCw, CircleDollarSign, Circle, ShoppingBag, Coffee, Home, Dumbbell, Plane, Gift, Wifi, Smartphone, BookOpen, Music, Film, Heart } from 'lucide-react';
+import { Wallet, Calendar, Plus, Maximize2, X, Minimize2 } from 'lucide-react';
 import { format, isFuture } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { CategoryIcon } from '../components/CategoryIcon';
 
-// Icon Map
-const ICON_MAP = {
-    Pizza, Car, PartyPopper, Zap, Wallet, HandCoins, RotateCw, CircleDollarSign, Circle,
-    ShoppingBag, Coffee, Home, Dumbbell, Plane, Gift, Wifi, Smartphone, BookOpen, Music, Film, Heart
-};
-
-const CategoryIcon = ({ iconName, color }) => {
-    const Icon = ICON_MAP[iconName] || Circle;
-    return (
-        <div className="w-8 h-8 rounded-full flex items-center justify-center text-white" style={{ backgroundColor: color }}>
-            <Icon size={16} />
-        </div>
-    );
-};
 
 export const Dashboard = ({ onOpenTransaction }) => {
     const { getCurrentBalance, getProjectedBalanceAPI, getDailyBalanceData, getMergedUpcoming, data } = useData();
@@ -90,16 +77,16 @@ export const Dashboard = ({ onOpenTransaction }) => {
             </div>
 
             {/* Direction Switcher */}
-            <div className="flex gap-1 bg-slate-100 p-2 rounded-lg">
+            <div className="flex gap-1 bg-slate-100 p-1 rounded-lg">
                 <button
                     onClick={() => setDirection('past')}
-                    className={`px-1 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'past' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
+                    className={`px-2 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'past' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                 >
                     Historique
                 </button>
                 <button
                     onClick={() => setDirection('future')}
-                    className={`px-1 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'future' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
+                    className={`px-2 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'future' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                 >
                     Futur
                 </button>
@@ -166,48 +153,76 @@ export const Dashboard = ({ onOpenTransaction }) => {
                     </div>
                 </Card>
 
-                {/* 2. Budget / Pie Chart */}
-                <Card className="flex flex-col h-[350px] lg:h-auto">
-                    <h3 className="heading-md mb-4">Répartition des Dépenses</h3>
-                    {pieData.length > 0 ? (
-                        <div className="flex-1 flex items-center justify-center relative">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <PieChart>
-                                    <Pie
-                                        data={pieData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={80}
-                                        outerRadius={100}
-                                        paddingAngle={5}
-                                        dataKey="value"
-                                    >
-                                        {pieData.map((entry, index) => (
-                                            <Cell key={`cell - ${index} `} fill={entry.color} strokeWidth={0} />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip formatter={(value) => `€${value.toLocaleString()} `} />
-                                    {/* <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ right: 0 }} /> */}
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none -ml-20">
-                                <span className="text-2xl font-bold text-slate-800">{pieData.length}</span>
-                                <span className="text-xs text-slate-400">Catégories</span>
+                {/* 2. Limits / Modules */}
+                <Card className="flex flex-col h-[380px] lg:h-auto overflow-hidden">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="heading-md">Límites Mensuales</h3>
+                        <span className="text-xs text-slate-400 font-medium bg-slate-100 px-2 py-1 rounded">
+                            {format(new Date(), 'MMMM', { locale: fr })}
+                        </span>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto pr-2 space-y-4">
+                        {data.limits.length === 0 ? (
+                            <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center">
+                                <p className="mb-2">No has definido límites.</p>
+                                <p className="text-xs">Ve a la pestaña "Límites" para configurar tu presupuesto.</p>
                             </div>
-                        </div>
-                    ) : (
-                        <div className="flex-1 flex items-center justify-center text-slate-400">
-                            Aucune donnée
-                        </div>
-                    )}
+                        ) : (
+                            data.limits.map(limit => {
+                                // Calculate spent for this limit in current month
+                                const now = new Date();
+                                const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                                const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+                                const spent = data.transactions
+                                    .filter(t => {
+                                        const tDate = new Date(t.date);
+                                        return t.type === 'expense' &&
+                                            tDate >= currentMonthStart &&
+                                            tDate <= currentMonthEnd &&
+                                            limit.category_ids.includes(t.category);
+                                    })
+                                    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+                                const percentage = Math.min((spent / limit.amount) * 100, 100);
+                                const isOver = spent > limit.amount;
+
+                                // Color logic
+                                let colorClass = 'bg-blue-500';
+                                if (percentage < 50) colorClass = 'bg-emerald-500';
+                                else if (percentage < 75) colorClass = 'bg-yellow-500'; // Yellow
+                                else if (percentage < 100) colorClass = 'bg-orange-500';
+                                else colorClass = 'bg-red-500'; // Over limit
+
+                                return (
+                                    <div key={limit.id} className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="font-semibold text-slate-700">{limit.name}</span>
+                                            <span className="font-medium text-slate-900">
+                                                {Math.round(spent)} <span className="text-slate-400 text-xs">/ {Math.round(limit.amount)}</span>
+                                            </span>
+                                        </div>
+                                        {/* Progress Bar */}
+                                        <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+                                            <div
+                                                className={`h-full rounded-full transition-all duration-500 ${colorClass}`}
+                                                style={{ width: `${isOver ? 100 : percentage}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        )}
+                    </div>
                 </Card>
             </div>
 
             {/* BOTTOM SECTION - Unified Timeline */}
             <Card className="px-0 ">
                 <div className="flex justify-between items-center mb-2">
-                    <h3 className="heading-md flex items-center gap-2">
-                        <Calendar size={20} className="text-slate-400" />
+                    <h3 className="heading-md flex items-center gap-2 text-xs">
+                        <Calendar size={18} className="text-slate-400" />
                         Chronologie des Activités
                     </h3>
                     {/* Hidden on Mobile, Visible on Desktop */}
