@@ -52,13 +52,16 @@ export const Recurring = () => {
 
     return (
         <div className="space-y-8">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h2 className="heading-lg mb-1">Dépenses Récurrentes</h2>
-                    <p className="text-slate-500">Paiements automatiques mensuels (Abonnements, Loyer, etc.)</p>
+                    <h2 className="heading-lg">Transactions Récurrentes</h2>
+                    <p className="text-slate-500 text-sm">Gérez vos abonnements et factures mensuelles.</p>
                 </div>
-                <button onClick={() => handleOpenModal()} className="btn bg-slate-900 hover:bg-black text-white">
-                    <Plus size={20} className="mr-2" /> Nouveau
+                <button
+                    onClick={handleOpenModal}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 shadow-sm transition-colors"
+                >
+                    <Plus size={18} /> Nouveau
                 </button>
             </div>
 
@@ -163,36 +166,54 @@ export const Recurring = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Montant</label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">€</span>
-                                <input
-                                    type="number"
-                                    className="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 focus:bg-white font-bold text-slate-900"
-                                    value={formData.amount}
-                                    onChange={e => setFormData({ ...formData, amount: e.target.value })}
-                                    placeholder="0.00"
-                                />
-                            </div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Montant (€)</label>
+                            <input
+                                type="number"
+                                required
+                                value={formData.amount}
+                                onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 focus:bg-white"
+                                placeholder="0.00"
+                            />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jour du mois</label>
-                            <select
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 focus:bg-white appearance-none"
+                            <input
+                                type="number"
+                                min="1"
+                                max="31"
+                                required
                                 value={formData.dayOfMonth}
                                 onChange={e => setFormData({ ...formData, dayOfMonth: e.target.value })}
-                            >
-                                {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
-                                    <option key={d} value={d}>{d}</option>
-                                ))}
-                            </select>
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 focus:bg-white"
+                                placeholder="1-31"
+                            />
                         </div>
                     </div>
-                    <div className="pt-2">
-                        <button type="submit" className="btn w-full bg-slate-900 hover:bg-black text-white py-3 rounded-xl font-medium shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-0.5">
-                            {editingId ? "Mettre à jour" : "Sauvegarder"}
+
+                    <div className="flex gap-2 pt-2">
+                        <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, type: 'expense' })}
+                            className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${formData.type === 'expense' ? 'bg-red-50 text-red-600 ring-2 ring-red-500/20' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+                        >
+                            Dépense
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, type: 'income' })}
+                            className={`flex-1 py-3 rounded-xl text-sm font-semibold transition-all ${formData.type === 'income' ? 'bg-green-50 text-green-600 ring-2 ring-green-500/20' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'}`}
+                        >
+                            Revenu
                         </button>
                     </div>
+
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-[0.98] mt-4"
+                    >
+                        {editingId ? 'Mettre à jour' : 'Ajouter'}
+                    </button>
                 </form>
             </Modal>
         </div>

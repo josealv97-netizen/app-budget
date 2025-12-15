@@ -82,7 +82,7 @@ export const Dashboard = ({ onOpenTransaction }) => {
                     onClick={() => setDirection('past')}
                     className={`px-2 lg:px-3 py-1 rounded-md text-[10px] lg:text-xs font-medium transition-all ${direction === 'past' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'} `}
                 >
-                    Historique
+                    Passé
                 </button>
                 <button
                     onClick={() => setDirection('future')}
@@ -156,17 +156,19 @@ export const Dashboard = ({ onOpenTransaction }) => {
                 {/* 2. Limits / Modules */}
                 <Card className="flex flex-col h-[380px] lg:h-auto overflow-hidden">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="heading-md">Límites Mensuales</h3>
-                        <span className="text-xs text-slate-400 font-medium bg-slate-100 px-2 py-1 rounded">
+                        <h3 className="heading-md">Limites Mensuelles</h3>
+                        <span className="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-1 rounded-lg">
                             {format(new Date(), 'MMMM', { locale: fr })}
                         </span>
                     </div>
 
                     <div className="flex-1 overflow-y-auto pr-2 space-y-4">
                         {data.limits.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center">
-                                <p className="mb-2">No has definido límites.</p>
-                                <p className="text-xs">Ve a la pestaña "Límites" para configurar tu presupuesto.</p>
+                            <div className="flex flex-col items-center justify-center h-full text-slate-400 text-center">
+                                <p className="text-sm">Aucune limite configurée.</p>
+                                <button className="text-blue-500 text-xs font-bold mt-2 hover:underline">
+                                    Ajouter un module
+                                </button>
                             </div>
                         ) : (
                             data.limits.map(limit => {

@@ -35,7 +35,7 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
         e.preventDefault();
         if (!formData.amount || !formData.description) return;
 
-        if (initialData) {
+        if (initialData && initialData.id) {
             updateTransaction(initialData.id, formData);
         } else {
             addTransaction(formData);
@@ -53,21 +53,21 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
                     onClick={() => setFormData(prev => ({ ...prev, type: 'expense', category: '' }))}
                     className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${formData.type === 'expense' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
                 >
-                    Gasto
+                    Dépense
                 </button>
                 <button
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, type: 'income', category: '' }))}
                     className={`flex-1 py-2 rounded-xl text-sm font-semibold transition-all ${formData.type === 'income' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}
                 >
-                    Ingreso
+                    Revenu
                 </button>
             </div>
 
             <div className="space-y-4">
                 {/* Amount */}
                 <div>
-                    <label>Monto</label>
+                    <label>Montant</label>
                     <div className="relative">
                         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-lg">€</span>
                         <input
@@ -83,17 +83,17 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
 
                 {/* Description */}
                 <div>
-                    <label>Concepto</label>
+                    <label>Description</label>
                     <input
                         value={formData.description}
                         onChange={e => setFormData({ ...formData, description: e.target.value })}
-                        placeholder={formData.type === 'expense' ? 'Ej: Supermercado' : 'Ej: Salario'}
+                        placeholder={formData.type === 'expense' ? 'Ex: Supermarché' : 'Ex: Salaire'}
                     />
                 </div>
 
                 {/* Date */}
                 <div>
-                    <label>Fecha</label>
+                    <label>Date</label>
                     <input
                         type="datetime-local"
                         value={formData.date}
@@ -103,7 +103,7 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
 
                 {/* Category */}
                 <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">Categoría</label>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">Catégorie</label>
                     <CategorySelector
                         categories={filteredCategories}
                         selectedId={formData.category} // Using name as ID
@@ -113,8 +113,11 @@ export const TransactionForm = ({ onClose, initialData = null }) => {
             </div>
 
             <div className="pt-4">
-                <button type="submit" className="btn w-full shadow-lg shadow-blue-200">
-                    {initialData ? 'Guardar Cambios' : 'Registrar Movimiento'}
+                <button
+                    type="submit"
+                    className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4"
+                >
+                    {(initialData && initialData.id) ? 'Mettre à jour' : 'Ajouter la transaction'}
                 </button>
             </div>
         </form>

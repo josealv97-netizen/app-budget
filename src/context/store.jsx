@@ -232,6 +232,17 @@ export const DataProvider = ({ children }) => {
         fetchData();
     };
 
+    const updateLimit = async (id, updates) => {
+        const { error } = await supabase.from('monthly_limits').update({
+            name: updates.name,
+            amount: updates.amount,
+            category_ids: updates.category_ids
+        }).eq('id', id);
+
+        if (error) console.error("Error updating limit:", error);
+        fetchData();
+    };
+
     const removeLimit = async (id) => {
         await supabase.from('monthly_limits').delete().eq('id', id);
         fetchData();
@@ -327,6 +338,14 @@ export const DataProvider = ({ children }) => {
                     );
 
                     if (!alreadyExists) {
+                        // EXCEPTION: Do not project INCOME if it's end of month (e.g. > 20th) AND it's the CURRENT month being projected
+                        // This prevents the chart from showing a "false" high balance at the end of the current month just because salary is coming.
+                        // We want to see if we can make it TO the salary.
+                        const isCurrentMonth = day.getMonth() === today.getMonth() && day.getFullYear() === today.getFullYear();
+                        if (r.type === 'income' && dayNum > 20 && isCurrentMonth) {
+                            return;
+                        }
+
                         if (r.type === 'income') runningBalance += Number(r.amount);
                         else runningBalance -= Number(r.amount);
                     }
@@ -425,6 +444,7 @@ export const DataProvider = ({ children }) => {
             removeCategory,
             addLimit,
             removeLimit,
+            updateLimit,
             getCurrentBalance,
             getProjectedBalanceAPI,
             //   getUpcomingTransactions,

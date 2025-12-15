@@ -18,7 +18,8 @@ function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard': return <Dashboard onOpenTransaction={(t) => {
-        const isTransaction = t && t.id && !t.nativeEvent;
+        // Allow objects with ID (edit) or objects with description (duplicate/template)
+        const isTransaction = t && (t.id || t.description) && !t.nativeEvent;
         setEditingTransaction(isTransaction ? t : null);
         setActiveModal('transaction');
       }} />;
@@ -27,7 +28,7 @@ function App() {
       case 'salaries': return <Salaries />;
       case 'modules': return <Modules />;
       default: return <Dashboard onOpenTransaction={(t) => {
-        const isTransaction = t && t.id && !t.nativeEvent;
+        const isTransaction = t && (t.id || t.description) && !t.nativeEvent;
         setEditingTransaction(isTransaction ? t : null);
         setActiveModal('transaction');
       }} />;
@@ -38,7 +39,7 @@ function App() {
     <DataProvider>
       <Layout
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        onNavigate={setCurrentPage}
         onOpenSettings={() => setActiveModal('settings')}
       >
         {currentPage === 'transactions' ? (
