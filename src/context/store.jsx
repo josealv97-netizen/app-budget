@@ -269,7 +269,8 @@ export const DataProvider = ({ children }) => {
 
     // Helper for Chart: Daily Balance for Chart
     // supports range (months) and direction ('past' or 'future')
-    const getDailyBalanceData = (rangeKey = '1M', direction = 'future') => {
+    // options: { excludeCurrentMonthIncome: boolean }
+    const getDailyBalanceData = (rangeKey = '1M', direction = 'future', options = {}) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -311,15 +312,26 @@ export const DataProvider = ({ children }) => {
         const pastExpense = pastTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + Number(t.amount), 0);
         runningBalance = initialPref + pastIncome - pastExpense;
 
+
+
         const days = eachDayOfInterval({ start: startDate, end: endDate });
 
         return days.map(day => {
             // New Logic: 
             // 1. Calculate ACTUAL transactions for this day
             const dailyTrans = data.transactions.filter(t => isSameDay(new Date(t.date), day));
-            const dailyIncome = dailyTrans.filter(t => t.type === 'income').reduce((acc, t) => acc + Number(t.amount), 0);
-            const dailyExpense = dailyTrans.filter(t => t.type === 'expense').reduce((acc, t) => acc + Number(t.amount), 0);
+            console.log("Daily Trans:", dailyTrans);
+            const isCurrentMonth = day.getMonth() === today.getMonth() && day.getFullYear() === today.getFullYear();
 
+            // Calculate Income - Exclude 'Salaire' if in strict mode and end of current month
+            const dailyIncome = dailyTrans.filter(t => t.type === 'income').reduce((acc, t) => {
+                if (options.excludeCurrentMonthIncome && isCurrentMonth && day.getDate() > 20) {
+                    if (t.category === 'Salaire') return acc;
+                }
+                return acc + Number(t.amount);
+            }, 0);
+
+            const dailyExpense = dailyTrans.filter(t => t.type === 'expense').reduce((acc, t) => acc + Number(t.amount), 0);
             // Apply Actual Transactions
             runningBalance += (dailyIncome - dailyExpense);
 
@@ -336,13 +348,11 @@ export const DataProvider = ({ children }) => {
                     const alreadyExists = dailyTrans.some(t =>
                         Math.abs(Number(t.amount) - Number(r.amount)) < 0.01
                     );
-
                     if (!alreadyExists) {
-                        // EXCEPTION: Do not project INCOME if it's end of month (e.g. > 20th) AND it's the CURRENT month being projected
-                        // This prevents the chart from showing a "false" high balance at the end of the current month just because salary is coming.
-                        // We want to see if we can make it TO the salary.
-                        const isCurrentMonth = day.getMonth() === today.getMonth() && day.getFullYear() === today.getFullYear();
-                        if (r.type === 'income' && dayNum > 20 && isCurrentMonth) {
+
+                        // Strict Rule Conditional: If options.excludeCurrentMonthIncome is true, skip income for this month
+                        // Otherwise, include it (for graph).
+                        if (options.excludeCurrentMonthIncome && r.type === 'income' && isCurrentMonth) {
                             return;
                         }
 
@@ -423,7 +433,8 @@ export const DataProvider = ({ children }) => {
     const getProjectedBalanceAPI = () => {
         // Reuse the Chart logic to ensure consistency
         // '1M' range covers until end of month
-        const chartData = getDailyBalanceData('1M', 'future');
+        // Use strictly conservative mode: exclude current month income projection
+        const chartData = getDailyBalanceData('1M', 'future', { excludeCurrentMonthIncome: true });
         if (chartData.length > 0) {
             return chartData[chartData.length - 1].balance;
         }
@@ -447,7 +458,6 @@ export const DataProvider = ({ children }) => {
             updateLimit,
             getCurrentBalance,
             getProjectedBalanceAPI,
-            //   getUpcomingTransactions,
             getDailyBalanceData,
             getMergedUpcoming
         }}>
